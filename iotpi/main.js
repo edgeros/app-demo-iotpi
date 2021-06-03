@@ -12,8 +12,6 @@
  *
  */
 const Web = require('webapp');
-const bodyParser = require('middleware').bodyParser;
-const iosched = require('iosched');
 var Device = require('device');
 
 /* IoT Pi device */
@@ -22,13 +20,7 @@ var iotpi = undefined;
 /* IoT Pi devices */
 var iotpis = new Map();
 
-/* Whether the app was awakened by a shared message */
-if (ARGUMENT != undefined) {
-	console.log('Awakened by share message:', ARGUMENT);
-}
-
 const app = Web.createApp();
-app.use(bodyParser.json());
 app.use(Web.static('./public', { index: ['index.html', 'index.htm'] }));
 
 /*
@@ -53,9 +45,7 @@ app.post('/api/select/:devid', function(req, res) {
 			iotpi.on('lost', iotpiRemove);
 
 			iotpi.on('message', function(msg) {
-				sockios.forEach(function(sockio) {
-					sockio.emit('iotpi-message', msg);
-				});
+				io.emit('iotpi-message', msg);
 			});
 
 			iotpi.send({ query: true }, function(error) {
@@ -162,7 +152,6 @@ function iotpiRemove() {
 	}
 }
 
-/*
- * Event loop
- */
-iosched.forever();
+
+/* Event loop */
+require('iosched').forever();

@@ -1,7 +1,7 @@
 {
-    "name": "iotpi-eap",
-    "version": "0.0.10",
-    "description": "用于控制iotpi的三个led",
+    "name": "com.acoinfo.iotpi",
+    "version": "0.0.6",
+    "description": "控制 iotpi 设备",
     "main": "main.js",
     "scripts": {
         "build": "eos build"
@@ -11,7 +11,7 @@
     "devDependencies": {
         "eslint": "^7.23.0",
         "@edgeros/jsre-types": "^0.1.1",
-        "@edgeros/eslint-plugin-jsre": "^0.0.1"
+        "@edgeros/eslint-plugin-jsre": "^0.0.3"
     },
-    "author": ""
+    "author": "edgeros@acoinfo.com"
 }
