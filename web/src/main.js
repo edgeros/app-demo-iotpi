@@ -29,7 +29,7 @@ edger.token()
   .then((result) => {
     const { token, srand } = result;
     setToken(token);
-    setScand(srand);
+    setSrand(srand);
     const socket = SocketIO({
       path: '/iotpi',
       query: getHeaders(),
