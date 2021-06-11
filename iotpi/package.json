@@ -1,6 +1,6 @@
 {
     "name": "com.acoinfo.iotpi",
-    "version": "0.0.6",
+    "version": "0.0.17",
     "description": "控制 iotpi 设备",
     "main": "main.js",
     "scripts": {

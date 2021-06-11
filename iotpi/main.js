@@ -27,21 +27,21 @@ app.use(Web.static('./public', { index: ['index.html', 'index.htm'] }));
  * Select device
  */
 app.post('/api/select/:devid', function(req, res) {
-	if (typeof req.params.devid !== 'string') {
-		res.sendStatus(400);
-		return;
-	} else {
-		iotpiRemove();
-	}
-
 	iotpi = new Device();
 	iotpi.request(req.params.devid, function(error) {
 		if (error) {
-			res.sendStatus(503, error.message);
+			res.send({
+				result: false,
+				code: 50004,
+				message: `设备错误：${error.message}`
+			});
 			iotpi = undefined;
-
 		} else {
-			res.send();
+			res.send({
+				result: true,
+				code: 20000,
+				message: 'success'
+			});
 			iotpi.on('lost', iotpiRemove);
 
 			iotpi.on('message', function(msg) {
@@ -59,7 +59,7 @@ app.post('/api/select/:devid', function(req, res) {
 	});
 });
 
-// Start app.
+/* Start app. */
 app.start();
 
 /* Socket IO */
@@ -86,7 +86,7 @@ io.on('connection', function(sockio) {
 				}
 			}, 3);
 		} else {
-			sockio.emit('iotpi-error', { error: 'No device!' });
+			sockio.emit('iotpi-error', { code: 50002, error: '无效设备!' });
 		}
 	});
 

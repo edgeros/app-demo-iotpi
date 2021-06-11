@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import { Cell, List, NavBar, Notify, CellGroup, Image, Icon, Switch} from 'vant';
+import { Cell, List, NavBar, Notify, CellGroup, Image, Icon, Switch, PullRefresh} from 'vant';
 import {edger} from '@edgeros/web-sdk';
 import SocketIO from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended';
@@ -18,6 +18,7 @@ Vue.use(CellGroup);
 Vue.use(Image);
 Vue.use(Icon);
 Vue.use(Switch);
+Vue.use(PullRefresh);
 
 edger.onAction('token', (result) => {
   const { token, srand } = result;
