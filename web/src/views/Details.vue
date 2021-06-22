@@ -32,6 +32,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Details",
   data() {
@@ -47,7 +48,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.go(-1);
+      this.$router.push({name: 'Home'});
     },
     initSocket() {
       this.$socket.$subscribe("iotpi-message", (msg) => {

@@ -6,6 +6,7 @@ import {edger} from '@edgeros/web-sdk';
 import SocketIO from 'socket.io-client';
 import VueSocketIOExt from 'vue-socket.io-extended';
 import { setToken, setSrand, getHeaders } from './service/auth';
+import { setActive } from './service/state';
 import 'vant/lib/index.css';
 
 Vue.config.productionTip = false
@@ -19,6 +20,13 @@ Vue.use(Image);
 Vue.use(Icon);
 Vue.use(Switch);
 Vue.use(PullRefresh);
+
+edger.onAction('active', () => {
+  setActive(true);
+});
+edger.onAction('deactive', () => {
+  setActive(false);
+});
 
 edger.onAction('token', (result) => {
   const { token, srand } = result;

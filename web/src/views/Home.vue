@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <van-nav-bar title="设备列表" fixed="true" safe-area-inset-top />
+    <van-nav-bar title="设备列表" safe-area-inset-top />
     <van-pull-refresh
-      style="min-height: 100vh; margin-top: 46px"
+      style="min-height: 100vh"
       v-model="isLoading"
       @refresh="onRefresh"
     >
@@ -33,6 +33,7 @@
 import axios from "axios";
 import { getHeaders } from "../service/auth";
 import { edger } from "@edgeros/web-sdk";
+import { getActive } from "../service/state";
 
 export default {
   name: "Home",
@@ -69,27 +70,33 @@ export default {
     },
     initSocket() {
       this.$socket.$subscribe("iotpi-lost", (devid) => {
-        edger.notify.info(`${devid} 设备已下线`);
+        if (getActive()) {
+          edger.notify.info(`${devid} 设备已下线`);
+        }
         this.iotpis = this.iotpis.filter((iotpi) => {
-          iotpi.devid !== devid;
+          return iotpi.devid !== devid;
         });
       });
       this.$socket.$subscribe("iotpi-join", (iotpi) => {
-        edger.notify.info(`新上线了 ${iotpi.alias} 设备`);
+        if (getActive()) {
+          edger.notify.info(`新上线了 ${iotpi.alias} 设备`);
+        }
         this.iotpis.push(iotpi);
       });
       this.$socket.$subscribe("iotpi-error", (error) => {
-        if (error.code === 50002) {
-          edger.notify.error(`无效设备！`);
-        } else {
-          edger.notify.error(error.message);
+        if (getActive()) {
+          if (error.code === 50002) {
+            edger.notify.error(`无效设备！`);
+          } else {
+            edger.notify.error(error.message);
+          }
         }
       });
     },
     getIotpiList() {
       this.$socket.client.emit("iotpi-list", (data) => {
         this.iotpis = data;
-        if (this.iotpis.length === 0) {
+        if (this.iotpis.length === 0 && getActive()) {
           edger.notify.error(`未发现设备！`);
         }
       });
@@ -101,10 +108,12 @@ export default {
           if (res.data.result) {
             this.$router.push({ name: "Details", params: iotpi });
           } else {
-            if (res.data.code === 50004) {
-              edger.notify.error(`您没有此设备权限！`);
-            } else {
-              edger.notify.error(`未知错误！`);
+            if (getActive()) {
+              if (res.data.code === 50004) {
+                edger.notify.error(`您没有此设备权限！`);
+              } else {
+                edger.notify.error(`未知错误！`);
+              }
             }
           }
         })
@@ -119,3 +128,5 @@ export default {
   },
 };
 </script>
+<style scoped>
+</style>
