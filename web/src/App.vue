@@ -14,4 +14,7 @@
   color: #2c3e50;
 }
 
+.safe-area-top {
+  padding-top: var(--edger-safe-area-inset-top);
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar title="设备详情" left-arrow @click-left="goBack()" safe-area-inset-top/>
+    <van-nav-bar title="设备详情" left-arrow @click-left="goBack()" class="safe-area-top"/>
     <van-cell-group>
       <van-cell title="设备ID">
         <template #default>
